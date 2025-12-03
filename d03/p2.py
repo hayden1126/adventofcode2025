@@ -10,22 +10,23 @@ def main():
     joltage = 0
 
     for bank in lines:
-        if len(bank) <= 2:
-            joltage += int(bank)
+        digits = [0 for _ in range(13)] # stores the index of n for that digit
+        digits[0] = -1
 
-        d1 = 0
-        d2 = 0
-        for i in range(len(bank)-2, -1, -1):
-            n = int(bank[i])
-            if n >= d1:
-                d2 = d1
-                d1 = int(bank[i])
-        d2 = max(d2, int(bank[-1]))
-
-        joltage += d1*10 + d2
+        for d in range(1, 13): # For each digit
+            mx = 0
+            for i in range(digits[d-1]+1, len(bank)-12+d):
+                if int(bank[i]) > mx:
+                    mx = int(bank[i]) # first occurance of max within the range
+                    digits[d] = i
     
-    print(joltage)
+        result = ""
+        for d in digits[1:]:
+            result += bank[d]
 
+        joltage += int(result)
+
+    print(joltage)
             
 main()
 

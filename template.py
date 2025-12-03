@@ -1,8 +1,11 @@
+#!/bin/python3
+
 import sys
 
 def main():
-    filename = len(sys.argv) == 1 ? "in.txt" : sys.argv[0]
+    filename = "in.txt" if len(sys.argv) == 1 else sys.argv[0]
     with open(filename, 'r') as f:
-        lines = f.readlines()
+        lines = [l for l in f.readlines() if l.strip()]
 
+main()
 

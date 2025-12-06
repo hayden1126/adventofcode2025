@@ -20,13 +20,11 @@ def calc(operands, start, stop, operator):
 
 def main():
     filename = "in.txt" if len(sys.argv) == 1 else sys.argv[1]
-    
-    lines = []
-    operators = []
 
     with open(filename, 'r') as f:
         lines = [l for l in f.readlines() if l.strip()]
 
+    operands = lines[:-1]
     operators = lines[-1]
    
     result = 0
@@ -38,13 +36,13 @@ def main():
     for idx in range(start+1, len(operators)):
         if operators[idx].isspace():
             continue
-        result += calc(lines[:-1], start, idx-1, op)
+        result += calc(operands, start, idx-1, op)
         
         start = idx
         op = operators[start]
     
     # reached the end, no next operator
-    result += calc(lines[:-1], start, len(operators), op)
+    result += calc(operands, start, len(operators), op)
 
     print(result)
 

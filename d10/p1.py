@@ -9,23 +9,16 @@ class Machine:
     def __init__(self, line):
         p1, p2 = line.index('('), line.index('{')
         self.goal = sum(1<<i if v == "#" else 0 for i, v in enumerate(line[1:p1-2]))
-        self.state = 0
         
         self.buttons = []
         for button in line[p1:p2-1].split(' '):
             self.buttons.append(sum(1<<int(n) for n in button.strip("()").split(',')))
 
     def test_toggle(self, i):
-        if type(i) == int:
-            return self.state ^ i
-        else:
-            return self.state ^ reduce(xor, i)
-
-    def toggle(self, i):
-        self.state = test_toggle(i)
+        return reduce(xor, i)
 
     def __str__(self):
-        return f"{bin(self.state)} : {bin(self.goal)} {[bin(b) for b in self.buttons]} {self.jreqs}"
+        return f"{bin(self.goal)} {[bin(b) for b in self.buttons]}"
 
 def main():
     filename = "in.txt" if len(sys.argv) == 1 else sys.argv[1]

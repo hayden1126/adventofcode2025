@@ -1,6 +1,7 @@
 #!/bin/python3
 
 import sys
+import functools
 
 def main():
     filename = "in.txt" if len(sys.argv) == 1 else sys.argv[1]
@@ -18,21 +19,19 @@ def main():
         return count_paths(devices, "svr", "fft") * r1 * count_paths(devices, "dac", "out")
 
 def count_paths(devices, start, end):
-    counters = {start: 1}
-    queue = [start]
-    while len(queue) > 0:
-        d1 = queue.pop(0)
-        for d2 in devices[d1]:
-            if d2 not in counters:
-                counters[d2] = 0
-            counters[d2] += counters[d1]
-            if d2 != end and d2 != "out" and d2 not in queue:
-                queue.append(d2)
+    @functools.lru_cache(maxsize=None)
+    def dfs(curr):
+        if curr == end:
+            return 1
+        if curr == "out" or curr not in devices:
+            return 0
     
-    if end in counters:
-        return counters[end]
-    else:
-        return 0
+        total = 0
+        for c in devices[curr]:
+            total += dfs(c)
+        return total
+    return dfs(start)
+
 
 print(main())
 
